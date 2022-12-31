@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import { useNavigate } from 'react-router-dom';
 import EmployeeService from '../services/EmployeeService';
 
-class CreateEmployeeComponent extends Component {
+class UpdateEmployeeComponent extends Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
+            id        : window.location.pathname.split("/")[2],
             firstName : '',
             lastName  : '',
             email     : ''
@@ -16,19 +17,27 @@ class CreateEmployeeComponent extends Component {
         this.changeFirstNameHandler = this.changeFirstNameHandler.bind(this);
         this.changelastNameHandler  = this.changelastNameHandler.bind(this);
         this.changeEmailHandler     = this.changeEmailHandler.bind(this);
-        this.saveEmployee           = this.saveEmployee.bind(this);
+        this.UpdateEmployee         = this.UpdateEmployee.bind(this);
 
         }
 
-    saveEmployee = (e) => {
+    componentDidMount(){
+        EmployeeService.getEmployeeById(this.state.id).then((res) => {
+            let employee = res.data;
+            this.setState({firstName : employee.firstName, lastName : employee.lastName, email : employee.email})
+        });
+    }
+
+    UpdateEmployee = (e) => {
         e.preventDefault();
 
         let employee = {firstName: this.state.firstName, lastName: this.state.lastName, email: this.state.email}; // javascript object
         console.log('employee => ' + JSON.stringify(employee));
 
-        EmployeeService.createEmployees(employee).then(res => {  // after success response, we redirect/naviagte to the lists page -- defined in springboot
+        EmployeeService.updateEmployee(employee, this.state.id).then(res => {
             this.props.navigate('/employees');
         });
+        
     }
 
     changeFirstNameHandler(event){
@@ -53,7 +62,7 @@ class CreateEmployeeComponent extends Component {
                 <div className='container'>
                     <div className='row'>
                         <div className='card col-md-6 offset-md-3 offset-md-3'>
-                            <h3 className='text-center'>Add Employee Form</h3>
+                            <h3 className='text-center'>Update Employee Form</h3>
                                 <div className='card-body'>
                                     <form>
                                         <div className='form-group'>
@@ -72,9 +81,8 @@ class CreateEmployeeComponent extends Component {
                                             value={this.state.email} onChange={event => this.changeEmailHandler(event)}/>
                                         </div>
 
-                                        <button className='btn btn-success' onClick={this.saveEmployee}>Save</button>
+                                        <button className='btn btn-success' onClick={this.UpdateEmployee}>Update</button>
                                         <button className='btn btn-danger' onClick={this.cancel.bind(this)} style = {{marginLeft: "10px"}}>Cancel</button>
-                                        {/* can bind like this too */}
 
                                     </form>
                                 </div>
@@ -88,7 +96,7 @@ class CreateEmployeeComponent extends Component {
 
 function WithNavigate(props) {
     let navigate = useNavigate();
-    return <CreateEmployeeComponent {...props} navigate={navigate} />
+    return <UpdateEmployeeComponent {...props} navigate={navigate}/>
 }
 
-export default WithNavigate
+export default WithNavigate;

@@ -12,7 +12,9 @@ class EmployeeComponent extends React.Component {
         }
 
         this.addEmployee = this.addEmployee.bind(this);
-
+        this.editEmployee = this.editEmployee.bind(this);
+        this.deleteEmployee = this.deleteEmployee.bind(this);
+        this.viewEmployee = this.viewEmployee.bind(this);
     }
 
     componentDidMount(){
@@ -21,19 +23,33 @@ class EmployeeComponent extends React.Component {
         })
     }
 
+    deleteEmployee(id){
+        EmployeeService.deleteEmployee(id).then((response) => {
+            this.setState({employees: this.state.employees.filter(employee => employee.id != id)});
+        })
+    }
+
+    viewEmployee(id){
+        this.props.navigate(`/view-employee/${id}`);
+    }
+
     addEmployee(){
         // const{navigate} = "/add-employee";
         // this.props.history.push('/add-employee')
         this.props.navigate('/add-employee');
     }
 
+    editEmployee(id){
+        this.props.navigate(`/update-employee/${id}`);
+    }
+
     render() {
         return (
             <div>
-                <h2 className='text-center'>Employees List</h2>
+                <h2 style={{marginTop: "10px"}} className='text-center'>Employees List</h2>
 
                 {/* <div className='row'> */}
-                    <button className='btn btn-primary' onClick={this.addEmployee}>Add Employee</button>
+                    <button style={{marginBottom: "10px"}} className='btn btn-primary' onClick={this.addEmployee}>Add Employee</button>
                 {/* </div> */}
 
                 <div className='row'>
@@ -54,6 +70,11 @@ class EmployeeComponent extends React.Component {
                                         <td>{employee.firstName}</td>
                                         <td>{employee.lastName}</td>
                                         <td>{employee.email}</td>
+                                        <td>
+                                            <button className='btn btn-info' onClick={()=> this.editEmployee(employee.id)}>Update</button>
+                                            <button style={{marginLeft: "10px"}} className='btn btn-danger' onClick={()=> this.deleteEmployee(employee.id)}>Delete</button>
+                                            <button style={{marginLeft: "10px"}} className='btn btn-info' onClick={()=> this.viewEmployee(employee.id)}>View</button>
+                                        </td>
                                     </tr>
                                 )
                             }

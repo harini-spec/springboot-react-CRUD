@@ -51,3 +51,5 @@
   color: white;
   padding-left: 2%;
 }
+
+.row { display: inline-block; }
