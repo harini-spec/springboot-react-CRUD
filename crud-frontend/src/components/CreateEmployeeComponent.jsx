@@ -51,8 +51,10 @@ class CreateEmployeeComponent extends Component {
         return (
             <div>
                 <div className='container'>
+                <br></br>
                     <div className='row'>
                         <div className='card col-md-6 offset-md-3 offset-md-3'>
+                        <br></br>
                             <h3 className='text-center'>Add Employee Form</h3>
                                 <div className='card-body'>
                                     <form>
@@ -71,7 +73,7 @@ class CreateEmployeeComponent extends Component {
                                             <input placeholder="Email" name="Email" className='form-control' 
                                             value={this.state.email} onChange={event => this.changeEmailHandler(event)}/>
                                         </div>
-
+                                        <br></br>
                                         <button className='btn btn-success' onClick={this.saveEmployee}>Save</button>
                                         <button className='btn btn-danger' onClick={this.cancel.bind(this)} style = {{marginLeft: "10px"}}>Cancel</button>
                                         {/* can bind like this too */}
